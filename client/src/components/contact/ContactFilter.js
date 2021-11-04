@@ -1,10 +1,12 @@
-import React, { useContext } from 'react';
-import ContextContact from '../../context/contact/contactContext';
+import React from 'react';
+import {
+  useContact,
+  filterContacts,
+  clearFilter,
+} from '../../context/contact/ContactState';
 
 const ContactFilter = () => {
-  const contextContact = useContext(ContextContact);
-
-  const { filterContacts, clearFilter } = contextContact;
+  const contactDispatch = useContact()[1];
 
   return (
     <form>
@@ -15,7 +17,9 @@ const ContactFilter = () => {
             type='text'
             placeholder='Filter Contacts...'
             onChange={(e) =>
-              e.target.value ? filterContacts(e.target.value) : clearFilter()
+              e.target.value
+                ? filterContacts(contactDispatch, e.target.value)
+                : clearFilter(contactDispatch)
             }
           />
           <span className='icon is-small is-left'>

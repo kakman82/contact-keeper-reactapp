@@ -1,11 +1,52 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { useAuth, logout } from '../../context/auth/AuthState';
+import { useContact, clearContacts } from '../../context/contact/ContactState';
 
 const Navbar = ({ title, icon }) => {
   function toggleBurgerMenu() {
     document.getElementById('navbarBasicExample').classList.toggle('is-active');
   }
+
+  const [authState, authDispatch] = useAuth();
+  const { isAuthenticated, user } = authState;
+
+  const contactDispatch = useContact()[1];
+
+  const onLogout = () => {
+    logout(authDispatch);
+    // logout sonrası state de yer alan contact arrayı temizliyoruz ki başka biri login olduğunda flash şeklinde kısa süreli de olsa mevcut contact lar sayfada görünmesin
+    clearContacts(contactDispatch);
+  };
+
+  const authLinks = (
+    <Fragment>
+      <a href='#!' className='navbar-item'>
+        Hello {user && user.name}
+      </a>
+      <a
+        href='#!'
+        className='navbar-item'
+        onClick={() => {
+          toggleBurgerMenu();
+          onLogout();
+        }}>
+        <i className='fas fa-sign-out-alt mr-1' /> Logout
+      </a>
+    </Fragment>
+  );
+
+  const guestLinks = (
+    <Fragment>
+      <Link className='navbar-item' to='/register' onClick={toggleBurgerMenu}>
+        Register
+      </Link>
+      <Link className='navbar-item' to='/login' onClick={toggleBurgerMenu}>
+        Login
+      </Link>
+    </Fragment>
+  );
 
   return (
     <nav
@@ -38,10 +79,7 @@ const Navbar = ({ title, icon }) => {
 
       <div id='navbarBasicExample' className='navbar-menu'>
         <div className='navbar-end'>
-          <Link className='navbar-item' to='/' onClick={toggleBurgerMenu}>
-            Home
-          </Link>
-
+          {isAuthenticated ? authLinks : guestLinks}
           <Link className='navbar-item' to='/about' onClick={toggleBurgerMenu}>
             About
           </Link>

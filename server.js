@@ -12,7 +12,8 @@ connectDB();
 // Init Middleware;
 app.use(express.json({ extended: false }));
 
-app.get('/', (req, res) => res.json({ msg: 'Welcome to ContactKeeper API!' }));
+//! bu kısım ilk server kurulumunda test için yaptık, heroku deploy öncesi commente almak gerek yoksa home page bu görünür :)
+//app.get('/', (req, res) => res.json({ msg: 'Welcome to ContactKeeper API!' }));
 
 // Define Routes;
 app.use('/api/users', require('./routes/users'));

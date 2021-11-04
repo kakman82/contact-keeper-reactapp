@@ -2,12 +2,11 @@ const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/auth');
 const { body, validationResult } = require('express-validator');
-const User = require('../models/User');
 const Contact = require('../models/Contact');
 
-// @route:  GET api/contacts
-// @dec:    Get all contacts depends on login user
-// @access: Private
+//* @route:  GET api/contacts
+//* @dec:    Get all contacts depends on login user
+//* @access: Private
 router.get('/', auth, async (req, res) => {
   try {
     const contacts = await Contact.find({ user: req.user.id }).sort({
@@ -20,9 +19,9 @@ router.get('/', auth, async (req, res) => {
   }
 });
 
-// @route:  POST api/contacts
-// @dec:    Add new contact
-// @access: Private
+//* @route:  POST api/contacts
+//* @dec:    Add new contact
+//* @access: Private
 router.post(
   '/',
   auth,
@@ -56,9 +55,9 @@ router.post(
   }
 );
 
-// @route:  PUT api/contacts/:id
-// @dec:    Update contact
-// @access: Private
+//* @route:  PUT api/contacts/:id
+//* @dec:    Update contact
+//* @access: Private
 router.put('/:id', auth, async (req, res) => {
   // kaydederken validate yaptığım için haricen aşağıda da req.body de varsa aldığım için gerek yok haricen validate yapmaya
 
@@ -101,9 +100,9 @@ router.put('/:id', auth, async (req, res) => {
   }
 });
 
-// @route:  DELETE api/contacts/:id
-// @dec:    Delete contact
-// @access: Private
+//* @route:  DELETE api/contacts/:id
+//* @dec:    Delete contact
+//* @access: Private
 router.delete('/:id', auth, async (req, res) => {
   try {
     let contactToDelete = await Contact.findById(req.params.id);

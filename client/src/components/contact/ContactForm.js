@@ -1,10 +1,20 @@
-import React, { useState, useContext, useEffect } from 'react';
-import ContactContex from '../../context/contact/contactContext';
+import React, { useState, useEffect, useContext } from 'react';
+import {
+  useContact,
+  addContact,
+  clearCurrent,
+  updateContact,
+  clearContactErrors,
+} from '../../context/contact/ContactState';
+import AlertContext from '../../context/alert/alertContext';
 
 const ContactForm = () => {
-  const contactContext = useContext(ContactContex);
+  const alertContext = useContext(AlertContext);
+  const { setAlert } = alertContext;
 
-  const { addContact, current, clearCurrent, updateContact } = contactContext;
+  const [contactState, contactDispatch] = useContact();
+
+  const { current, error } = contactState;
 
   useEffect(() => {
     if (current !== null) {
@@ -17,7 +27,7 @@ const ContactForm = () => {
         type: 'personal',
       });
     }
-  }, [contactContext, current]); // bu useEffect hangi durumların değişikliğinde çalışacak ise onlar arraya eklenir, yoksa boş array olarak bırakılır - yapılmadığında hata alırız
+  }, [current]); // bu useEffect hangi durumların değişikliğinde çalışacak ise onlar arraya eklenir, yoksa boş array olarak bırakılır - yapılmadığında hata alırız
 
   const [contact, setContact] = useState({
     name: '',
@@ -32,19 +42,29 @@ const ContactForm = () => {
     setContact({ ...contact, [e.target.name]: e.target.value });
   };
 
+  useEffect(() => {
+    if (error !== null) {
+      //error.map((err) => setAlert(err.msg, 'is-danger'));
+      for (let i = 0; i < error.length; i++) {
+        setAlert(error[i].msg, 'is-danger');
+      }
+      clearContactErrors(contactDispatch);
+    }
+  }, [error, setAlert, contactDispatch]);
+
   const onSubmit = (e) => {
     e.preventDefault();
 
     if (current === null) {
-      addContact(contact);
+      addContact(contactDispatch, contact);
     } else {
-      updateContact(contact);
+      updateContact(contactDispatch, contact);
     }
     clearAll();
   };
 
   const clearAll = () => {
-    clearCurrent();
+    clearCurrent(contactDispatch);
   };
 
   return (

@@ -1,21 +1,25 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import ContactContext from '../../context/contact/contactContext';
+import {
+  useContact,
+  deleteContact,
+  setCurrent,
+  clearCurrent,
+} from '../../context/contact/ContactState';
 
 const ContactItem = ({ contact }) => {
-  const contactContext = useContext(ContactContext);
+  // we just need the contact dispatch without state.
+  const contactDispatch = useContact()[1];
 
-  const { deleteContact, setCurrent, clearCurrent } = contactContext;
-
-  const { id, name, email, phone, type } = contact;
+  const { _id, name, email, phone, type } = contact;
 
   const onDelete = () => {
-    deleteContact(id);
-    clearCurrent();
+    deleteContact(contactDispatch, _id);
+    clearCurrent(contactDispatch);
   };
 
   const onCurrent = () => {
-    setCurrent(contact);
+    setCurrent(contactDispatch, contact);
   };
 
   return (
