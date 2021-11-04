@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const config = require('config');
+const dotenv = require('dotenv').config();
 
 module.exports = function (req, res, next) {
   // Get token from header
@@ -13,7 +13,7 @@ module.exports = function (req, res, next) {
   }
   // If there is token
   try {
-    const decoded = jwt.verify(token, config.get('jwtSecret'));
+    const decoded = jwt.verify(token, process.env.REACT_APP_JWT_SECRET);
     // buradaki user register ve login sırasında oluşturulan token içindeki user.id aslında
     req.user = decoded.user;
     next();

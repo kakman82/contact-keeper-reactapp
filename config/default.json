@@ -1,4 +1,0 @@
-{
-    "mongoURI": "mongodb+srv://krmreact:BRKZEMxXhdYmzW1K@contactkeeper.rq77r.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-    "jwtSecret": "8v68mwe6fj"
-}

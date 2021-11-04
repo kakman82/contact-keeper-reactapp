@@ -1,5 +1,6 @@
 node_modules/
-
+.env.local
+.env
 /client/build
 
 .DS_Store
